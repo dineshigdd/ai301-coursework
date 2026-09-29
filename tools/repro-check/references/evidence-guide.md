@@ -91,15 +91,9 @@ what specific-and-honest looks like next to boilerplate. -->
   - **Live mode:** Look inside the candidate's draft or posted issue/PR comment on GitHub, cross-referenced against the repository's issue templates and contribution policies (including AI-use disclosures).
 
 - **What good looks like:**
-  - Overall section states the intention to tackle an issue, statement on specific reproduction related to the claiming issue,comments can have supporting ideas, any evidence,unintetntionl behaviors, contradictiory opinions, suggestions, etc. Contribution policy  it may have emotional statements ,and it can serve as an informal summmary of what does in the next section(e.g`#Candidate repro report`).
-
-- **What good looks like:**
   - States clear intent to investigate or report findings on the specific issue.
   - Serves as a concise, informal summary of the full reproduction report found under `# Candidate Repro Report`.
   - May include supporting context, key observations (e.g., unintended behaviors, environmental quirks), suggestions, or evidence snippets.
   - Complies with repository contribution guidelines and required policies (e.g., AI-use disclosures).
   - Maintains a clear, professional, and grounded tone.
   - **Fails if:** Uses generic or unhelpful boilerplate, contains overly emotional or unprofessional remarks, fails required policy/AI-use disclosures, or makes claims that contradict the reproduction report.
-
-
-
