@@ -41,10 +41,6 @@ packages designed around that family.
 
 ## Checks
 
-# Rubric: is this reproduction package ready to post?
-
-## Checks
-
 | Check | Evidence | Pass condition | Weight |
 |---|---|---|---|
 | env-recorded | `Environment.` section | Contains explicit values for key runtime parameters: OS/platform, main runtime/binary name, and tool version string. | required |
@@ -54,10 +50,6 @@ packages designed around that family.
 | expected-output | `Expected.` section | Explicitly states the expected non-error outcome or intended behavior to contrast with `Actual.`. | required |
 | analysis | `Analysis.` section (or summary notes in `Execution.` / `Actual.`) | Contains a non-empty statement declaring the reproduction verdict (e.g., "reproduced", "cannot reproduce") or identifying the root cause. | required |
 | disclosure-policy | Claim comment or report footer | Includes required repository disclosures (such as AI/tool assistance statements) and complies with repo contribution guidelines. | required |
-
-## Verdict rule
-
-Accept the candidate issue if and only if every check with weight `required` passes (`P`); otherwise, if any `required` check fails (`F`) or lacks sufficient evidence (`?`), reject the candidate issue, while checks with weight `preferred` are used solely for ranking accepted issues and never alter the accept or reject verdict.
 
 ## Verdict rule
 
