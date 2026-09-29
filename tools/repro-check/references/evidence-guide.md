@@ -27,7 +27,7 @@ like. Write the map you wish your grader had.
 
 <!-- Where the environment record lives, and what a sufficient one
 looks like against the issue's stated target. -->
--**Where it lives**
+- **Where it lives**
   -**Eval mode:** Look inside the `# Candidate Repro Report` block, specifically under the `Environment.` header or section.
   -**Live mode:**  Look inside the candidate's draft report file (e.g., under `## Reproduction Report:` or `# Candidate Reproduction Report`), specifically under the `Environment.` header.
 
@@ -41,7 +41,6 @@ looks like against the issue's stated target. -->
 
 <!-- Where the reproduction steps live, and what makes them followable
 by a stranger, starting state to trigger. -->
-looks like against the issue's stated target. -->
 - **Where it lives:**
   - **Eval mode:** Look inside the `# Candidate Repro Report` block, specifically under the `Preparation` and `Execution` headers (or equivalent reproduction step sections).
   - **Live mode:** Look inside the candidate's draft report file, under the `Preparation` and `Execution` headers (or equivalent reproduction step sections).
