@@ -15,63 +15,87 @@ label is not graded.
 
 **GitHub username**
 
-[Your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comment upstream is identified by this name, and it is
-the only thing that ties it to you. Several students may plan the same
-house issue, so this is what keeps their comments off your score and
-yours off theirs.]
+dineshigdd
 
 **Plan comment**
 
-[Link to the comment where you posted your plan on the issue. Use the comment's own
-permalink. **Then paste the text of that comment underneath the link** — the pasted text is
-what this field is graded on, so copy across what you actually posted.]
+https://github.com/codepath/pathreview-ai301-fa26-s1/issues/60#issuecomment-5989322499  
+I reproduced the `TypeError` on Ubuntu 24.04 following the issue report. 
+
+**Diagnosis:**
+The root cause occurs in `FaithfulnessChecker.check()` where `chunk.get("text", "")` is used to extract text. When a context chunk explicitly contains `{"text": None}`, `dict.get()` finds the existing `"text"` key and returns `None` instead of the default `""`. Passing `None` into `" ".join(...)` causes the `TypeError`.
+
+**Scope:**
+- **In Scope:** Modifying `FaithfulnessChecker.check()` in `rag/evaluator/faithfulness_checker.py` to sanitize `None` text values, and removing the corresponding test marker in `tests/unit/test_faithfulness_checker.py`.
+- **Out of Scope:** Refactoring surrounding RAG evaluation logic, prompt templates, or creating new test modules.
+
+**Proposed Approach:**  
+I will update `FaithfulnessChecker.check()` to safely handle `None` values using `chunk.get("text") or ""` before string join execution. Additionally, per `docs/CONTRIBUTING.md` guidelines for seeded bug fixes, I will remove the `@pytest.mark.xfail(strict=True)` marker from `test_none_context_chunk_text` in `tests/unit/test_faithfulness_checker.py` so the test suite reports a clean `PASSED` status with exit code 0.
 
 ---
 
 ## Your branch
 
-**Branch**
-
+**Branch**  
+fix/60-faithfullchecker-crash
 [The name of the branch you built the change on, exactly as it appears in your fork. The
 naming shape is a type prefix, then the issue number, then a short description. **The issue
 number in the branch name must be the number of the issue you claimed** — a name carrying
 any other number does not satisfy this field.]
 
-**Evidence**
+**Evidence** 
 
-[Your Unit 2 reproduction steps re-run against the built change: the before, then the
-after. Paste both, including the commands you ran and their output.]
+#### Before Fix (Unit 2 Reproduction)
+Command:
+```bash
+python -c "from rag.evaluator.faithfulness_checker import FaithfulnessChecker; FaithfulnessChecker().check('Knows Python.', [{'text': None}])"
+```
 
-## Eval iterations
+Output:
+```bash
+TypeError: sequence item 0: expected str instance, NoneType found
+```
+#### After Fix (Unit 3 Verification)
+Command:
+```bash
+python -c "from rag.evaluator.faithfulness_checker import FaithfulnessChecker; print(FaithfulnessChecker().check('Knows Python.', [{'text': None}]))"
+```
+Output:
+```bash
+0.0
+```
+Command:
+```bash
+pytest tests/unit/test_faithfulness_checker.py
+```
+
+Output:
+```bash
+19 passed, 3 xfailed in 11.72s
+```
+
+## Eval iterations  
 
 Answer all four sections. Quote source text directly; paraphrase does not satisfy these
 fields.
 
-**Run history**
+**Run history**  
+Run 1: 18/20 (90%)
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+**Package analysis**  
 
-**Package analysis**
+Package: pkg-13
+* Rubric Decision: REJECT (failed: files)
+* Gold Label: ACCEPT (clear-accept)
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+**Check rationale**  
 
-**Check rationale**
+| files | `Files to Touch` section in `plan.md` | Identifies specific repository file paths to be created, modified, or deleted. | required |
 
-[Quote one check from the `rubric.md` you uploaded to `tools/plan-check/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+Rationale: I did not revise this check during evaluation runs because my rubric achieved a passing agreement score (18/20) on the first run. When designing this check, I rejected a lenient condition that would accept conceptual module descriptions (e.g., naming `AdaptDispatch::EraseInDisplay` without a specific file path, as seen in `pkg-13`, which omitted a dedicated `Files to Touch` section entirely). I rejected that looser condition in favor of requiring explicit repository file paths to ensure implementation plans are immediately actionable without ambiguity.
 
-**Trade-offs**
-
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+**Trade-offs**  
+In pkg-13, requiring an explicit `Files to Touch` section with concrete repository file paths caused a strict rejection because the candidate plan described the fix locations conceptually (e.g., `AdaptDispatch::EraseInDisplay`) without naming exact file paths. While this strictness caused a single mismatch against the gold label's clear-accept verdict on pkg-13, it prevents under-specified or incomplete plans from passing evaluation in live engineering environments.
 
 ---
 
