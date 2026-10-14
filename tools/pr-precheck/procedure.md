@@ -96,7 +96,7 @@ How to reach the verdict:
 
 ```json
 {
-  "item": "<PR URL bundle id or>",
+  "item": "<PR URL or bundle id>",
   "checks": [
     {"name": "<check name>", "grade": "pass|fail|unclear",
      "evidence": "<one line: the fact or quote that decided it>"}
