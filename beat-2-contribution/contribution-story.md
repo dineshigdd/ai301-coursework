@@ -55,10 +55,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Automated GitHub Issue Scout for Backend & AI Workflows**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I built an automated issue-scout CLI skill that queries GitHub for Python and TypeScript repositories aligned with my goal to transition into backend architecture and AI systems, ranking top candidates against a quality rubric. My initial scan fell short because broad queries and label syntax errors (-label "test" instead of -label: test) let test-only tasks, non-code design assets, closed bot issues, and pure CSS updates bypass the filters. To fix this, I corrected the gh query syntax, added strict negative search flags (-label: test, -label: documentation, -label:css), enforced a rule limiting results to one issue per repository, and updated ranking drop rules to filter out trivial frontend cleanups in favor of core backend and AI workflow issues.
 
 **Unit 6: [one line on the tool work]**
 
