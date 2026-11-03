@@ -125,32 +125,41 @@ I chose this issue to gain hands-on experience with Kaoto's component rendering 
 
 **Environment Setup**
 
-[What a stranger would need to stand this up: your operating system,
-the relevant versions (language, runtime, package manager, the project
-itself), and how you set the project up. Then the challenges you faced
-and how you solved them, or that none came up.]
+- **OS:** Windows 10 Home (Version 22H2)
+- **Browser:** Google Chrome Version 156.0.8078.48
+- **Node.js Version:** v24.14.1
+- **Package Manager:** yarn 4.18.1
+- **Git Commit Hash:** 69dbe998012dc6b2bd1cf0a9885b873fd7678d10
+- **Git Branch:** bugfix/issue-117-endpoint-options-alignment
 
 **Steps to Reproduce**
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
+1. Clone the `KaotoIO/kaoto` repository and navigate into the project directory.
+2. Install dependencies using `yarn install`.
+3. Start the local development server by running `yarn workspace @kaoto/kaoto run start`.
+4. Open the Kaoto UI in Google Chrome.
+5. Click on the **Catalog** menu item in the left sidebar.
+6. Click on any component card in the main area to open its properties modal.
+7. Click on the **Endpoint Options** tab in the pop-up modal.
+8. Observe the horizontal alignment between the top table (captioned `Path parameters`) and the bottom table (captioned `Query parameters`).
 
 **Reproduction Evidence**
 
-- **Commit showing reproduction:** [link to commit in your fork]
-- **Screenshots/logs:** [if applicable]
-- **My findings:** [what you discovered during reproduction; an
-  honest, evidenced cannot-reproduce that led you to re-pick or ask
-  the maintainer belongs here and costs you nothing]
+- **Commit showing reproduction:** none
+- **Screenshots/logs:** <img width="1882" height="742" alt="image" src="https://github.com/user-attachments/assets/6c0de2cb-e478-4c4a-94d6-f8ee24a4682b" />
+- **My findings:**
+    - The modal UI renders these sections using two independent `<PropertiesTableSimple>` components rather than a single unified table grid.
+    - Inspected key component files in `packages/ui/src/components/PropertiesModal`:
+    - `PropertiesTableSimple.tsx`: Renders independent table headers and rows, causing differing column widths between tables.
+    - `PropertiesTabs.tsx`: Renders the tabbed layout sections inside the modal.
+    - `camel-to-tabs.adapter.ts`: Supplies the grouped parameter data and counts.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
-
+- Tool: `repro-check`
+- What it produced: An automated validation audit that evaluated `repro-draft.md` and `claim-draft.md` against the assignment rubric, generating specific pass/fail checks for environment documentation, reproduction steps, expected/actual outputs, and component analysis.
+- Difficulties: The initial validation run failed on multiple criteria (`env-recorded`, `actual-output`, `expected-output`, and `analysis`) because the report used generic OS labels ("Windows"), omitted browser information, listed `Commit: none`, lacked an explicit "Expected Output" section, and relied solely on prose without DOM/CSS element measurements.
+- What changed: Updated `repro-draft.md` with explicit details: added the exact operating system version (`Windows 10 Home 22H2 Build 19045`), browser details (`Chrome v156.0.8078.48`), the 40-character commit hash from `git rev-parse HEAD`, DevTools pixel width measurements (`px`) for both table columns, an explicit `Expected Output` section, and a "Reproduced on..." line within the architectural component analysis.
 ---
 
 ## Solution Approach
