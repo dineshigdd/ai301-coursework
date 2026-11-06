@@ -166,30 +166,60 @@ I chose this issue to gain hands-on experience with Kaoto's component rendering 
 
 **Analysis**
 
-[Your analysis of the root cause: what is causing the issue, traced
-to the files and functions involved.]
+During local testing under Google Chrome v156 on Windows 10 (commit 69dbe998012dc6b2bd1cf0a9885b873fd7678d10), inspecting the ActiveMQ 6.x component's properties modal in DevTools confirmed that parameter sections render as two separate `<table>` DOM elements. Because each table independently calculates its own column widths based on its content, the Name and Description columns misalign vertically across sections.
+
+In `PropertiesTabs.tsx`, each parameter group is passed to its own `<PropertiesTableSimple>` instance, which creates an isolated PatternFly `<Table>` without setting shared column widths (`PropertiesTableSimple.tsx`). Although both tables use identical headers (`Name`, `Description`, `Default`, and `Type` from `camel-to-table.adapter.ts`), their independent table layouts lead to varying computed column pixel widths across sections.
+
+To align them, the parameter groups need to share a single unified `<Table>` container with row groups, allowing the browser to calculate column widths once across all rows.
 
 **Proposed Solution**
 
-[High-level description of your fix approach, and what you are
-deliberately NOT changing.]
+I recommend combining the path and query parameter tables into a single table featuring two clearly labeled row groups. Because both groups share identical columns, this approach lets the browser size each column once across all rows, ensuring the columns align naturally. You can retain the individual path and query labels alongside their counts as section headings to keep the groups distinct.
+
+Note: While setting shared widths in `PropertiesModal.scss` is less invasive, it's a styling workaround. Hardcoding those width rules requires constant synchronization across tables, and it can become awkward if other tables in the modal feature different column counts or require different proportions.
+
+This solution will not change:
+* **PropertiesModal.tsx** — Data-fetching and modal state management remain untouched.
+* **CatalogPage.tsx** — Only handles opening the modal and does not control table layout.
+* **camel-to-table.adapter.ts** — Continues converting properties into rows with identical headers unless a data-shaping problem is discovered.
+* **PropertiesTableTree.tsx** — Endpoint Options remain simple tables rather than tree tables.
+* **Global styling and unrelated tabs** — Carbon or PatternFly framework-wide styles and other independent tables remain unchanged.
+
 
 **Implementation Plan**
 
-1. [Modify file X to do Y]
-2. [Add or change Z]
-3. [Update tests]
+The data layer needs no change. `IPropertiesTab.tables[]` already holds one table per group, and each has its own `caption` (e.g. `path parameters (3)`) and `rows`. Only the rendering needs to change. Because the change is in rendering, it also covers the issue's "other tabs" case: any tab that ends up with 2+ simple tables gets aligned columns.
 
-[Record deviations here as they happen: what changed mid-build and
-why. A recorded deviation is honest work; silent drift is not.]
+1. **`Tables/PropertiesTableSimple.tsx`: accept several groups**
+   - Change the prop from `table: IPropertiesTable` to `tables: IPropertiesTable[]` (a single-table tab passes a one-element array).
+   - Render **one** `<Table>` with **one** `<Thead>`, built from `tables[0].headers`.
+   - Render **one `<Tbody>` per group**. PatternFly `Table` supports multiple `Tbody`, which is also the semantic HTML for row groups.
+   - HTML allows only one `<caption>` per table, so a group caption becomes the first row of its `<Tbody>`: `<Tr><Th colSpan={headers.length} scope="rowgroup">{caption}</Th></Tr>`. Skip this row when `caption` is undefined, so the Component Options, Message Headers and Options tabs look exactly as they do now.
+   - Keep the per-group test-id prefix (`tab-X-table-N`) on each group's caption cell and rows, so existing ids such as `tab-1-table-1-row-0-cell-name` and `tab-1-table-1-properties-modal-table-caption` still resolve. Header ids exist only once now (`tab-X-table-0-header-*`).
+
+2. **`PropertiesTabs.tsx`: group consecutive simple tables**
+   - Walk `tab.tables` and collect consecutive `PropertiesTableType.Simple` tables that have identical `headers` into one group. Render each group with a single `<PropertiesTableSimple tables={group} />`.
+   - `PropertiesTableType.Tree` tables (APIs tab) and simple tables with different headers keep their own table. `PropertiesTableTree.tsx` is untouched.
+
+3. **Styling (`PropertiesModal.scss`)** (only if needed)
+   - Style the group-heading `Th` like the old caption (capitalized, left-aligned, not bold-uppercase like column headers) so the visual change stays limited to the alignment fix.
+
+4. **Unchanged:** `camel-to-tabs.adapter.ts`, `camel-to-table.adapter.ts`, `PropertiesModal.models.ts`, `PropertiesModal.tsx`. The adapter tests (`camel-to-tabs.adapter.test.ts` lines 88–89 assert two tables with captions) keep passing as-is.
+
+5. **Tests**
+   - `PropertiesModal.test.tsx`: update the assertions on `tab-1-table-1-header-*` (lines ~114–117). Those headers no longer exist; the table now has one shared header row.
+   - Add a regression test: in the Endpoint Options tab exactly **one** `table` element renders, both group captions are present, and every row has the same cell count as the header.
+   - Add a test that a tab with a single, caption-less table renders no group-heading row.
+   - Check Storybook/Chromatic stories for the Properties modal. Expect a visual diff, and mention it in the PR.
+
+6. **Verify:** `yarn workspace @kaoto/kaoto test src/components/PropertiesModal` while iterating, then the full Definition of Done (build, test, lint:fix, lint:style:fix, commitlint). Check manually in the dev server: open a catalog component with both path and query params (e.g., Azure CosmosDB, Timer, Kafka) and confirm the columns line up vertically.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
-
+- Tool:`plan-check`
+- What it produced: An automated validation audit that evaluated `plan.md` and `plan-comment.md` against the assignment rubric, generating pass/fail checks for diagnosis, scope, touched files, approach, test plan, risks/side-effects, and draft comment structure.
+- Difficulties: Initial runs failed on `diagnosis` because the analysis relied solely on code reading without citing live DevTools observations, and on `comment` because the table-grouping logic was assigned to `PropertiesTableSimple.tsx` instead of `PropertiesTabs.tsx` while omitting the optional `PropertiesModal.scss` styling tweak.
+- What changed: Updated `plan.md` to cite DevTools DOM inspection of ActiveMQ 6.x under Google Chrome v156 on Windows 10 (commit `69dbe998012dc6b2bd1cf0a9885b873fd7678d10`). Updated `plan-comment.md` to place table grouping in `PropertiesTabs.tsx` and multi-group rendering in `PropertiesTableSimple.tsx`, added the `.scss` mention, pinned the OS/browser/commit environment, and included ActiveMQ 6.x in the test targets until `plan-check` returned an `accept` verdict.
 ---
 
 ## Testing Strategy
