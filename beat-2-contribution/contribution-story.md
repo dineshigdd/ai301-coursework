@@ -146,6 +146,9 @@ I chose this issue to gain hands-on experience with Kaoto's component rendering 
 **Reproduction Evidence**
 
 - **Commit showing reproduction:** none
+- **Measured DevTools Column Widths:**
+  - *Path Parameters Table:* Name column = `521.53px`, Description column = `946.44px`, Type column = `183.22px`, Default column=`169.81px`
+  - *Query Parameters Table:* Name column = `447.56px`,  Description column = `934.27px`, Type column = `185.48px`, Default column=`253.69px`
 - **Screenshots/logs:** <img width="1882" height="742" alt="image" src="https://github.com/user-attachments/assets/6c0de2cb-e478-4c4a-94d6-f8ee24a4682b" />
 - **My findings:**
     - The modal UI renders these sections using two independent `<PropertiesTableSimple>` components rather than a single unified table grid.
