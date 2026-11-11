@@ -58,11 +58,9 @@ one in the week it belongs to.
 
 I built an automated issue-scout CLI skill that queries GitHub for Python and TypeScript repositories aligned with my goal to transition into backend architecture and AI systems, ranking top candidates against a quality rubric. My initial scan fell short because broad queries and label syntax errors (-label "test" instead of -label: test) let test-only tasks, non-code design assets, closed bot issues, and pure CSS updates bypass the filters. To fix this, I corrected the gh query syntax, added strict negative search flags (-label: test, -label: documentation, -label:css), enforced a rule limiting results to one issue per repository, and updated ranking drop rules to filter out trivial frontend cleanups in favor of core backend and AI workflow issues.
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Configured Upstream Voice Guard and Created Local Repository Memory File**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+I installed the voice-guard Git hook and initialized CLAUDE.local.md to persist repository setup notes and test commands. During testing, the voice guard flagged an internal timeline conflict in my claim draft—where the heading specified 72 hours while the body stated 48 hours—forcing me to standardize the timeline prior to posting on GitHub. The CLAUDE.local.md file successfully persisted local build steps (yarn workspace @kaoto/kaoto run start) across Claude Code sessions without polluting Git status. Nothing broke during repository memory initialization; I verified this by running git status to confirm CLAUDE.local.md remained ignored while Claude Code correctly recalled local development instructions
 
 **Unit 7: [one line on the tool work]**
 
