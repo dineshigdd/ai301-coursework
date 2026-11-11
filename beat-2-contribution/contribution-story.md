@@ -224,17 +224,16 @@ The data layer needs no change. `IPropertiesTab.tables[]` already holds one tabl
 
 ## Testing Strategy
 
-[What observable checks prove the fix: your reproduction steps re-run
-against the built change (before and after), and the repo's own test
-suite or checks with the outcome shown. "Tests pass" with nothing
-observable named is not a strategy.]
+To verify the fix, I re-ran the original reproduction steps on my feature branch (`bugfix/issue-117-endpoint-options-alignment`) after building the application via `yarn workspace @kaoto/kaoto run start`. In Google Chrome, I navigated to **Catalog** -> component options -> **Endpoint Options** tab and inspected the rendered sub-tables using browser DevTools. 
+
+Before the fix, the Path and Query `PropertiesTableSimple` tables calculated independent layout grids, resulting in misaligned columns (Name column: 521.53px vs. 447.56px; Default column: 169.81px vs. 253.69px). After applying the fix, both sub-tables share uniform column width percentages, rendering aligned grid-for-grid with identical column widths across both sections. Additionally, all automated build, linting, and component checks defined in `ship-manifest.md` passed cleanly without regressions.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- **Tool:** ship-gate / pr-precheck
+- **What it produced:** Executed `check_gate.py` on the feature branch, validating that `test_evidence.md` contained matching before-and-after DevTools width measurements and that all manifest checks passed, issuing a `ship-gate: PASS` token.
+- **Difficulties:** Initial runs failed due to broken Markdown image paths and system PATH issues running the `claude` CLI inside git hooks.
+- **What changed:** Replaced local file image links with concrete pixel measurements in `test_evidence.md` and updated environment configuration to allow non-interactive CLI calls.
 
 ---
 
