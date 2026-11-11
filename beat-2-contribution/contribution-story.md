@@ -95,26 +95,30 @@ I chose this issue to gain hands-on experience with Kaoto's component rendering 
 
 **Problem Description**
 
-[In your own words, what is broken or missing?]
+In the Kaoto component properties modal, parameter sections (such as Path and Query parameters under the Endpoint Options tab) render as separate `<table>` DOM elements. Because each table independently calculates its column widths based on string lengths, identical columns (such as Name and Description) misalign vertically across sections.
 
 **Expected Behavior**
 
-[What should happen?]
+Both the Path and Query parameter tables in the Endpoint Options tab should display identical, grid-aligned column widths that line up vertically, while retaining their respective section headings and counts.
 
 **Current Behavior**
 
-[What actually happens?]
+In `PropertiesTabs.tsx`, each parameter group is passed to its own `PropertiesTableSimple` instance, rendering an isolated PatternFly `<Table>` without setting shared column widths (`PropertiesTableSimple.tsx`). Chrome DevTools measurements confirm mismatched column widths across sections (`Name column: 521.53px vs. 447.56px`; `Description column:946.44px vs. 934.27px`; `Default column: 169.81px vs. 253.69px`; `Type column: 183.22px vs. 253.69px` ).
 
 **Affected Components**
 
-[Which parts of the codebase are involved?]
+- `Tables/PropertiesTableSimple.tsx` — Modified to accept an array of tables (`tables: IPropertiesTable[]`), rendering one shared `<Table>` container with one `<Thead>` and multiple `<Tbody>` row groups (rendering section captions as rowgroup header cells with `.properties-modal__group-caption`).
+- `PropertiesTabs.tsx` — Added a `groupTables()` helper to detect consecutive simple tables with identical headers and group them into a single `PropertiesTableSimple` call.
+- `PropertiesModal.scss` — Added styling for `.properties-modal__group-caption` to match the previous section caption typography.
+- `PropertiesModal.test.tsx` and `PropertiesTabs.test.tsx` — Updated and added unit/regression tests to verify header consolidation, caption `colspan`, data row structure, and `groupTables` behavior.
+- *Unchanged Components:* `camel-to-tabs.adapter.ts`, `camel-to-table.adapter.ts`, `PropertiesModal.models.ts`, `PropertiesModal.tsx`, and `PropertiesTableTree.tsx`.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: plan-check
+- What it produced: Returned an ACCEPT verdict after validating that `plan.md` clearly isolated the independent table calculations in `PropertiesTableSimple.tsx` and proposed a clean single-table consolidation strategy using PatternFly `<Tbody>` row groups.
+- Difficulties: Initial plan drafts were flagged for asserting unverified root causes as absolute facts rather than observed DOM/CSS layout behaviors.
+- What changed: Refined `plan.md` to detail specific structural rendering updates across `PropertiesTableSimple.tsx`, `PropertiesTabs.tsx`, and `PropertiesModal.scss`, while explicitly excluding unaffected adapter and model files.
 
 ---
 
