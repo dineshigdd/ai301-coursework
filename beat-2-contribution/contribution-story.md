@@ -62,7 +62,7 @@ I built an automated issue-scout CLI skill that queries GitHub for Python and Ty
 
 I installed the voice-guard Git hook and initialized CLAUDE.local.md to persist repository setup notes and test commands. During testing, the voice guard flagged an internal timeline conflict in my claim draft—where the heading specified 72 hours while the body stated 48 hours—forcing me to standardize the timeline prior to posting on GitHub. The CLAUDE.local.md file successfully persisted local build steps (yarn workspace @kaoto/kaoto run start) across Claude Code sessions without polluting Git status. Nothing broke during repository memory initialization; I verified this by running git status to confirm CLAUDE.local.md remained ignored while Claude Code correctly recalled local development instructions
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Configured Ship-Gate Manifest and Executed Pre-Flight PR Validation**
 
 I configured `ship-manifest.md` to automate dependency installation, UI library compilation, and linting checks before running my local `pr-precheck`. Running `check_gate.py` on my branch produced a full validation output and a temporary `ship-gate: PASS` token once all manifest criteria were met. The process fought me when initial precheck runs flagged broken Markdown image links, unresolved issue links pointing to my fork instead of upstream, and system PATH issues executing `claude` CLI commands inside voice-guard hooks. Because of these enforcement checks, I updated `pr_draft.md` to explicitly link upstream `KaotoIO/kaoto#117`, replaced missing screenshot paths with clear DevTools measurement data, and manually initiated the PR creation targeting upstream.
 
