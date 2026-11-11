@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Daminda Dinesh Imaduwa Gamage
 **GitHub Username:** dineshigdd
 **Issue:** https://github.com/KaotoIO/kaoto/issues/117
-**Pull Request:** [GitHub PR link, once opened]
+**Pull Request:** https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -66,8 +66,7 @@ it is true - say how you know.]
 
 **Unit 7: [one line on the tool work]**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+I configured `ship-manifest.md` to automate dependency installation, UI library compilation, and linting checks before running my local `pr-precheck`. Running `check_gate.py` on my branch produced a full validation output and a temporary `ship-gate: PASS` token once all manifest criteria were met. The process fought me when initial precheck runs flagged broken Markdown image links, unresolved issue links pointing to my fork instead of upstream, and system PATH issues executing `claude` CLI commands inside voice-guard hooks. Because of these enforcement checks, I updated `pr_draft.md` to explicitly link upstream `KaotoIO/kaoto#117`, replaced missing screenshot paths with clear DevTools measurement data, and manually initiated the PR creation targeting upstream.
 
 **Unit 8: [one line on the tool work]**
 
@@ -265,27 +264,35 @@ built, decisions you made when you made them, wrong turns included.]
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** [[GitHub PR URL when opened]](https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045)
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** 
+- **Fix & Core Changes:** 
+  Fixes issue [KaotoIO/kaoto#117](https://github.com/KaotoIO/kaoto/issues/117) by resolving vertical column misalignment in the Endpoint Options modal. 
+  - Refactored `PropertiesTableSimple` to accept grouped table data, rendering a single unified `<table>` with individual `<tbody>` sections per parameter group and shared `<thead>` headers.
+  - Added a `groupTables` helper in `PropertiesTabs` to group consecutive simple tables sharing identical headers, while keeping tree tables separate.
+  - Updated SCSS in `PropertiesModal.scss` to format group heading rows appropriately without breaking existing test IDs.
+
+- **Why:** 
+  Previously, each parameter section rendered as an independent `<table>` element, causing the browser to compute column widths separately (resulting in misaligned Name, Description, Default, and Type columns). Rendering a single consolidated table allows the browser to compute matching column widths naturally across all groups.
+
+- **Testing & Evidence:**
+  - **Automated:** Added regression tests in `PropertiesModal.test.tsx` and unit tests in `PropertiesTabs.test.tsx` (all 52 component tests passed; full suite of 8,182 tests passed clean with raised timeouts).
+  - **Manual / Visual:** Verified in Chrome v156 (Windows 10) on ActiveMQ 6.x. Before the fix, column widths differed between sections (e.g., Name column: 521.53px vs 447.56px). After the fix, both sections share unified column widths (Name: 447.56px, Description: 934.27px, Default: 185.48px, Type: 253.69px).
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 11/10/2026: none yet
+- [-]: none yet
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: ship-gate (`check_gate.py`)
+- What it produced: Pre-check validation output and a passing token (`ship-gate: PASS`) confirming that branch checks, diff quality, test evidence, manifest rules, and PR description standards were met.
+- Difficulties: The pre-check initially failed with a `STOP` due to missing screenshot paths, broken Markdown placeholder syntax (`DRAG`), and an issue URL pointing to my fork instead of upstream. Later, executing step 12 via Claude Code failed because the Claude CLI was not on the system PATH used by the voice-guard hook.
+- What changed: Fixed `pr_draft.md` to reference the upstream issue `KaotoIO/kaoto#117`, replaced local broken image links with clear textual descriptions of DevTools testing evidence, and executed `gh pr create` manually in the terminal targeting upstream `KaotoIO/kaoto`.
 
 ---
 
