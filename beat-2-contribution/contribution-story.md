@@ -288,7 +288,7 @@ Before the fix, the Path and Query `PropertiesTableSimple` tables calculated ind
 
 **Toolkit**
 
-- Tool: ship-gate (`check_gate.py`)
+- Tool: `ship-gate`(A pre-pull request validation hook that executes manifest project checks and `pr-precheck` rules before code submission). I used it to run automated checks against my branch, plan, evidence, and PR draft before opening the pull request on GitHub.
 - What it produced: Pre-check validation output and a passing token (`ship-gate: PASS`) confirming that branch checks, diff quality, test evidence, manifest rules, and PR description standards were met.
 - Difficulties: The pre-check initially failed with a `STOP` due to missing screenshot paths, broken Markdown placeholder syntax (`DRAG`), and an issue URL pointing to my fork instead of upstream. Later, executing step 12 via Claude Code failed because the Claude CLI was not on the system PATH used by the voice-guard hook.
 - What changed: Fixed `pr_draft.md` to reference the upstream issue `KaotoIO/kaoto#117`, replaced local broken image links with clear textual descriptions of DevTools testing evidence, and executed `gh pr create` manually in the terminal targeting upstream `KaotoIO/kaoto`.
