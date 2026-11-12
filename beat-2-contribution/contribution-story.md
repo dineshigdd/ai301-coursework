@@ -158,7 +158,7 @@ In `PropertiesTabs.tsx`, each parameter group is passed to its own `PropertiesTa
 
 **Toolkit**
 
-- Tool: `repro-check`
+- Tool: `repro-check`(An automated reproduction validation script that audits `repro-draft.md` and claim details against assignment requirements). I used it via Claude Code to verify that my bug reproduction environment, steps, expected vs. actual outcomes, and initial component analyses met course criteria before moving forward.
 - What it produced: An automated validation audit that evaluated `repro-draft.md` and `claim-draft.md` against the assignment rubric, generating specific pass/fail checks for environment documentation, reproduction steps, expected/actual outputs, and component analysis.
 - Difficulties: The initial validation run failed on multiple criteria (`env-recorded`, `actual-output`, `expected-output`, and `analysis`) because the report used generic OS labels ("Windows"), omitted browser information, listed `Commit: none`, lacked an explicit "Expected Output" section, and relied solely on prose without DOM/CSS element measurements.
 - What changed: Updated `repro-draft.md` with explicit details: added the exact operating system version (`Windows 10 Home 22H2 Build 19045`), browser details (`Chrome v156.0.8078.48`), the 40-character commit hash from `git rev-parse HEAD`, DevTools pixel width measurements (`px`) for both table columns, an explicit `Expected Output` section, and a "Reproduced on..." line within the architectural component analysis.
