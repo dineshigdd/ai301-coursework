@@ -130,6 +130,7 @@ In `PropertiesTabs.tsx`, each parameter group is passed to its own `PropertiesTa
 - **Package Manager:** yarn 4.18.1
 - **Git Commit Hash:** 69dbe998012dc6b2bd1cf0a9885b873fd7678d10
 - **Git Branch:** bugfix/issue-117-endpoint-options-alignment
+- **Setup Difficulties:** Initial environment setup required installing Yarn package manager and the Java Development Kit (JDK) manually prior to building the project and starting the development server.
 
 **Steps to Reproduce**
 
