@@ -301,25 +301,39 @@ Before the fix, the Path and Query `PropertiesTableSimple` tables calculated ind
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+- **AI-Assisted Codebase Navigation:** Leveraged AI tools to analyze a complex enterprise codebase (`KaotoIO/kaoto`), rapidly mapping out table component hierarchies, properties tabs, and React component trees without getting bogged down in boilerplate.
+- **Pair Programming with Claude Code:** Utilized Claude Code and PR monitoring tools to accelerate the development lifecycle, drafting precise fixes, managing git workflows, and validating local pre-flight checks.
+- **Dynamic Table Creation & Component Refactoring:** Gained strong familiarity with PatternFly React table structures by implementing dynamic table creation—writing helper utilities to group parameter schemas programmatically and render unified single-table layouts using dynamic `<Tbody>` row groups and `.properties-modal__group-caption` styling.
+- **Automated Quality & Verification:** Strengthened automated workflow practices by configuring local validation scripts (`check_gate.py`) and setting up strict voice-guard rules to verify response quality and maintain clean pull request threads.
+- **GitHub CLI Integration:** Gained hands-on experience using the GitHub CLI (`gh`) to view pull request details, interact with reviews, and manage workflow actions directly from the command line.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+Navigating this contribution presented several technical and workflow challenges across code understanding, AI tool integration, and pre-flight validation:
+
+- **Codebase Complexity & Dynamic Rendering:** Initially, tracing the complex enterprise codebase and understanding how PatternFly table components were dynamically generated across isolated parameter groups presented a learning curve, which I resolved by mapping out component trees with AI assistance.
+- **AI Tool & Configuration Hurdles:** Integrating Claude Code into the workflow introduced configuration issues, specifically around enabling the tool to parse local `voice-guard` validation rules correctly.
+- **Ship-Gate Execution & Timeout Adjustments:** The `ship-gate` validator (`check_gate.py`) initially timed out during local pre-flight checks. I identified the performance bottleneck, adjusted the execution timeout thresholds, and successfully re-ran the test suite to achieve a passing verdict.
+- **Pre-PR Gap Resolution & Evidence Polishing:** Before opening the pull request, I systematically resolved five specific validation gaps flagged during pre-flight review:
+  1. Fixed untracked screenshot paths (`./misaligned-table-screenot.png` and `./vertically-aligned-table.png`) by embedding proper visual evidence into the PR description.
+  2. Accounted for open plan items (Storybook/Chromatic checks) by explicitly documenting scope boundaries in the PR text.
+  3. Resolved test-failure mismatches between early main branch runs (3 failures) and full branch runs (0 failures) by clarifying timeout-related test flakiness in the description.
+  4. Corrected PR metadata by updating the change classification from "Improvement" to "Bug fix" and removing empty summary headings.
+  5. Verified issue references to ensure `Fixes #117` pointed to upstream `KaotoIO/kaoto#117` rather than the fork namespace.
+
+Addressing these gaps allowed the pull request to pass all automated checks cleanly before being opened and merged upstream.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+- **Prioritize Codebase Comprehension Before AI Assistance:** Gain a deeper, manual understanding of the core codebase architecture and data flows before relying heavily on AI code assistants, ensuring I have a stronger foundational mental model of how components interact.
+- **Optimize Linux Environment Setup:** Configure my Linux-based development environment and local tooling dependencies earlier in the lifecycle to streamline script executions, file watchers, and pre-flight tests.
+- **Implement Flexible Voice-Guard Rules:** Design more adaptable voice-guard validation rules from the start to prevent strict formatting clashes while maintaining response quality during automated checks.
 
 ---
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
-
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- [Kaoto Documentation](https://kaoto.io/docs/): Served as the central technical reference for understanding Kaoto's architecture, component lifecycle, visual designer structures, and setup requirements.
+- [PatternFly React Table Components Documentation](https://www.patternfly.org/components/table): Provided the official specification and DOM structural guidelines for `<Table>`, `<Tbody>` row groups, and custom CSS layout rules used during modal table refactoring.
+- [Kaoto Upstream Repository & Issue #117](https://github.com/KaotoIO/kaoto/pull/4412): Served as the primary codebase reference and target issue for reproducing and resolving parameter column misalignments across modal tabs.
+- [CodePath AI301 Course Materials & Tooling Scripts](https://courses.codepath.org/courses/ai301/unit/8): Provided local pre-flight validation scripts (`check_gate.py`), `ship-gate` criteria, and repository workflow instructions.
