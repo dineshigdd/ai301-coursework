@@ -255,7 +255,7 @@ Before the fix, the Path and Query `PropertiesTableSimple` tables calculated ind
 
 **Toolkit**
 
-- Tool: Chrome DevTools, VS Code, and `check_gate.py` (ship-gate pre-flight validator)
+- Tool: Chrome DevTools, VS Code, and `check_gate.py` (`ship-gate` pre-flight validator). I used VS Code to refactor the React components and write regression tests, Chrome DevTools to measure live table column widths before and after the fix, and `check_gate.py` to validate branch quality and evidence before opening the PR.
 - What it produced: Refactored React component tree and unit test assertions verifying unified single-table rendering across modal parameter tabs.
 - Difficulties: Initial precheck runs flagged broken Markdown screenshot paths and invalid repository URL references targeting fork namespaces rather than upstream.
 - What changed: Replaced local image dependencies with explicit DevTools pixel width measurements in `test_evidence.md` and corrected PR links to target upstream `KaotoIO/kaoto#117`.
