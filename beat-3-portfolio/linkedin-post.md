@@ -1,10 +1,9 @@
-Want to contribute to open source? In this post, I’ll share how I tackled my first open-source contribution with the help of AI coding agents.
+I fixed a persistent table alignment bug in Kaoto's open-source visual integration builder so configuration options stay easy to read on any screen size.
 
-As a student at CodePath—a community focused on AI-assisted software engineering—I had the opportunity to contribute to Kaoto, an open-source visual integration builder on GitHub.I initially looked for a backend or AI-related task, but since those issues didn't fit my timeline, I pivoted to a UI bug: fixing column misalignments between parameter tables inside Kaoto's component properties modal.
+As a student at CodePath, I tackled a front-end issue where parameter table columns misaligned inside the component properties modal. Instead of applying a temporary style patch, I restructured the component's underlying layout code so the browser enforces uniform column widths natively, and updated the automated tests to secure the fix.
 
-To solve this, I looked past quick CSS fixes and addressed the core layout structure. I refactored the component code to group consecutive tables that shared identical headers into a single <Table> element utilizing multiple <tbody> row groups. This ensured the browser rendered the columns with uniform widths. I also updated the component test suite to verify the layout fix.
+My pull request was officially reviewed, approved, and merged into the official Kaoto repository!
 
-
-You can check out my pull request and code changes [here](https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045)
+You can check out my merged pull request and code changes [here](https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045)
 
 #OpenSource #React #TypeScript #WebEngineering #CodePath
