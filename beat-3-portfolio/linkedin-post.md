@@ -5,5 +5,5 @@ As a student at CodePath, I tackled a front-end issue where two parameter tables
 
 My pull request was reviewed, approved, and merged into the official Kaoto repository!
 
-You can check out my merged pull request and code changes [here](https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045).
+You can check out my merged pull request and code changes [here](https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045).  
 #OpenSource #React #TypeScript #WebEngineering #CodePath
