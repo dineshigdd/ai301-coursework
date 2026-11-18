@@ -1,15 +1,11 @@
-# Table Column Width Alignment
+# Table Column Width Alignment (Align columns in endpoint options parameter tables)
 
 ## Overview
-I contribute my code a UI change on table displayed on a modal.  The repository is the open-source project `KaotoIO/kaoto` , which is a visual Integration Designer for Apache Camel,which is an integration framwork that connects your application with services, APIs and data - whether they live in the cloud, on-premise, or both.
+I contributed to the open-source project `KaotoIO/kaoto`, fixing a visual table alignment bug in the component properties modal. Kaoto is a visual integration designer for Apache Camel, an integration framework that connects applications with cloud and on-premise services. You can use Kaoto as a VS Code extension, in a containerized environment with Podman, or as an online testing instance at https://kaotoio.github.io/kaoto/.
 
-You can use  `Kaoto` as a VS Code Extenstion, in a containerized environment with `Podman` or as an Online Testing Instance at `https://kaotoio.github.io/kaoto/`
+When you visit the catalog section of Kaoto (https://kaotoio.github.io/kaoto/#/catalog), it provides a collection of building blocks categorized into Components, Processors, Entities, and Kamelets. Clicking a building block opens a three-tab details modal. 
 
-When you visit catalog section of `Kaoto`(https://kaotoio.github.io/kaoto/#/catalog), it provides a large collection of building blocks for graphical design. These categorized into 4 main groups: `Componenet`,`Processor`,`Entity` and `Kamelet`.
-When you click on a building blocks , it display details about it in the from 3-tab modal. Each tab contain a table. 
-
-Before I fix the issue , On `Endpoint Options` tab, the table was rendered by combining two individual tables for Path Parameters and Query Parameters. Infact this was the design approach used for other two parameters as well.  Because , it uses two indipendent tables and as column width depend on the content of the tables, the table widths were different for Path Parameter table and the Query Parameter table. As a result, the main table displayed vertically misaligned. Therfore, my task was to come up with a solution for this misalignemnt. 
-
+Before my fix, the Endpoint Options tab rendered Path Parameters and Query Parameters in two separate, independent tables. Because HTML tables calculate column widths based solely on their own cell contents, the separate tables resulted in vertically misaligned columns. My task was to solve this structural misalignment. My pull request was successfully reviewed, approved, and merged into the official repository: https://github.com/KaotoIO/kaoto/pull/4412#issue-6322633045.
 
 ## What happened
 I picked up Issue #117, which reported a visual alignment bug in this modal:
@@ -19,17 +15,27 @@ I picked up Issue #117, which reported a visual alignment bug in this modal:
 *Vertically Misaligned Table*
 <img width="1879" height="745" alt="misaligned-tables" src="https://github.com/user-attachments/assets/5b9d4fef-58c9-498c-aed8-c5e22dc7d557" />
 
+To reproduce the issue locally, I opened the catalog modal for a component containing both parameter types and inspected the DOM structure on the Endpoint Options tab. As I noted on the issue thread:
+> *"The misalignment happens because the path and query parameters are rendered inside separate <PropertiesTableSimple> table instances rather than a single unified table grid, causing each table to calculate its column widths independently based on its own content."*
 
+Based on my reproduction, I changed my initial plan of just investigating layout rules and pivoted to a structural fix, stating on the issue:
+> *"I'm planning to fix this by grouping consecutive simple tables that share the same headers into a single table structure, so they line up properly."*
 
-To reproduce the issue locally, I opened the catalog modal for a component containing both parameter types and inspected the DOM structure on the Endpoint Options tab. I confirmed that rendering two separate <PropertiesTableSimple> components caused each HTML table to size its columns independently based on its own text content, throwing off the vertical column alignment between the two sections.
+Maintainer `@lordrip` confirmed my reproduction: *"hey @dineshigdd, I'm glad you could reproduce the issue, the screenshot reflects the exact problem."*
 
-Next, I checked PropertiesModal.scss and <PropertiesTableSimple> to see if any existing CSS controlled the column widths or table-layout, and found no explicit width rules. Because standard HTML tables calculate column widths per <table> element, trying to force separate tables into alignment with custom CSS widths would be fragile across different screen sizes and parameter names.
+To implement this, I refactored the component to render consecutive parameter tables inside a single shared `<Table>` component using multiple row groups (`<tbody>` elements). To preserve the visual hierarchy of the original captions, I added a dedicated group caption class to `PropertiesModal.scss`:
 
-This led me to change my approach: instead of styling two separate tables to match, I refactored the component structure to group consecutive parameter tables together. By rendering them inside a single shared <Table> component using multiple row groups (<tbody> elements) and matching the group header styling to the original captions, I ensured that all sections share the exact same column constraints automatically.
-
+```scss
+  // Group heading row inside a shared table; mirrors the look of the former table caption
+  &__group-caption {
+    color: var(--pf-t--global--text--color--subtle);
+    font-size: var(--pf-t--global--font--size--sm);
+    font-weight: normal;
+    text-align: start;
+  }
+```
 *Vertically Aligned Table*
 <img width="1895" height="749" alt="vertically-aligned-table" src="https://github.com/user-attachments/assets/1000663f-6ad1-4fc6-8eda-39c9a1194ed6" />
-
 
 ### The Changes I made
 ```
